@@ -123,7 +123,7 @@ The script is robust: It deselects all pieces first, then precisely selects need
 For advanced tweaks: Integrate with Express for a web UI, or add bandwidth throttling.
 
 ## Contributing
-Fork the repo, make changes, and submit a pull request. Issues welcome at [github.com/nadikaprabhath/torrent-downloader](https://github.com/nadikaprabhath) (replace with your actual repo).
+Fork the repo, make changes, and submit a pull request. Issues welcome at [github.com/nadikaprabhath/Magnet-Torrent-Downloader](https://github.com/nadikaprabhath).
 
 ## License
 MIT License. Copyright (c) 2025 Nadika Prabhath. See script header for details.
