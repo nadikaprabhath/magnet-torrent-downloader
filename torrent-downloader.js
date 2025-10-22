@@ -14,7 +14,7 @@ import * as fs from 'fs/promises';
 const BASE_DOWNLOAD_PATH = path.join(os.homedir(), 'Downloads/Torrents');
 const MAX_CONNECTIONS = 200; // Increased for better peer connections and faster speeds
 const UPLOAD_LIMIT = 100 * 1024; // Optional: 100 KB/s upload limit (uncomment in clientOpts if needed)
-// Curated list of reliable public UDP trackers (updated October 2025 from ngosang/trackerslist and newtrackon)
+// Curated list of reliable public UDP trackers
 const PUBLIC_TRACKERS = [
   'udp://tracker.opentrackr.org:1337/announce',
   'udp://open.tracker.cl:1337/announce',
