@@ -1,16 +1,18 @@
 # Torrent Downloader Script
 
-This is a Node.js script for downloading torrents from magnet links. It supports selective file downloading, creates dedicated folders for each torrent, adds public trackers for better speed, and provides real-time progress updates. Built with WebTorrent, it's lightweight and runs in the console.
+This is a Node.js script for downloading torrents from magnet links. It supports selective file downloading, creates dedicated folders for each torrent, adds public trackers for better speed, and provides real-time progress updates with an animated progress bar. Built with WebTorrent, it's lightweight and runs in the console.
 
 **Alternative**: For a more mature solution with higher speeds, see the [aria2 Setup Guide](#alternative-using-aria2) below.
 
 ## Features
 - Paste a magnet link to start downloading.
 - Fetches torrent metadata and lists files for selective download (e.g., choose specific files or "all").
+- **Animated progress bar** with real-time visual feedback.
+- **Intelligent ETA prediction** algorithm that adapts to varying download speeds.
 - Automatically creates a new folder in `~/Downloads/Torrents` based on the torrent name.
 - Adds reliable public trackers to improve peer discovery and download speeds.
 - Precise piece selection to minimize downloading unwanted files.
-- Progress tracking: Shows percentage, downloaded size, speed, time left, and peers.
+- Comprehensive progress tracking: Shows percentage, downloaded size, speed, time left, and active peers.
 - Error handling for invalid links, no peers, and interruptions (e.g., Ctrl+C for graceful shutdown).
 - Custom completion check for selective downloads (since WebTorrent's 'done' event may not trigger perfectly).
 
@@ -23,13 +25,13 @@ This is a Node.js script for downloading torrents from magnet links. It supports
 1. **Install Node.js**: Download from [nodejs.org](https://nodejs.org/) if not already installed. Verify with `node -v`.
 
 2. **Create a Project Directory**:
-```
+```bash
    mkdir torrent-downloader
    cd torrent-downloader
 ```
 
 3. **Initialize the Project**:
-```
+```bash
    npm init -y
 ```
    This creates a `package.json` file.
@@ -43,7 +45,7 @@ This is a Node.js script for downloading torrents from magnet links. It supports
    }
 ```
    Install the main library:
-```
+```bash
    npm install webtorrent
 ```
    No other dependencies are needed (built-in Node modules like `readline`, `path`, `os`, and `fs` are used).
@@ -53,7 +55,7 @@ This is a Node.js script for downloading torrents from magnet links. It supports
 
 ## Usage
 1. **Run the Script**:
-```
+```bash
    node torrent-downloader.js
 ```
 
@@ -63,7 +65,8 @@ This is a Node.js script for downloading torrents from magnet links. It supports
 
 3. **Download Process**:
    - It creates a folder like `~/Downloads/Torrents/Torrent_Name`.
-   - Shows progress every 5 seconds.
+   - Shows an animated progress bar with real-time updates every 5 seconds.
+   - The ETA prediction algorithm continuously adjusts based on actual download speeds.
    - Completes when selected files are downloaded, then exits.
 
 4. **Interrupt**:
@@ -91,14 +94,33 @@ This is a Node.js script for downloading torrents from magnet links. It supports
    Created new download folder: /Users/yourname/Downloads/Torrents/Example_Torrent
    Saving to: /Users/yourname/Downloads/Torrents/Example_Torrent
    Selected total size: 50.00 MB
-   Progress: 50.00% | Downloaded: 25.00 MB | Speed: 1.00 MB/s | Time left: 0.42 min | Peers: 10
+   
+   [████████████████░░░░░░░░░░░░░░░░] 50.00%
+   Downloaded: 25.00 MB / 50.00 MB | Speed: 1.00 MB/s | ETA: 0.42 min | Peers: 10
+   
    ...
+   
+   [████████████████████████████████] 100.00%
    Download complete! Files saved to: /Users/yourname/Downloads/Torrents/Example_Torrent
 ```
+
+## Progress Tracking Features
+
+### Animated Progress Bar
+The script displays a smooth, animated progress bar that updates in real-time, providing visual feedback on download progress. The bar uses Unicode block characters for a clean, terminal-friendly appearance.
+
+### ETA Prediction Algorithm
+The intelligent ETA (Estimated Time of Arrival) prediction algorithm:
+- Tracks download speed over multiple intervals for accuracy
+- Adapts to fluctuating network conditions and peer availability
+- Provides realistic time estimates that adjust as download progresses
+- Smooths out temporary speed variations to avoid erratic predictions
+- Displays time remaining in minutes or hours based on the estimated duration
 
 ## Configuration
 - **Download Path**: Change `BASE_DOWNLOAD_PATH` in the script (default: `~/Downloads/Torrents`).
 - **Max Connections**: Adjust `MAX_CONNECTIONS` (default: 200) for performance (higher may speed up but use more resources).
+- **Progress Update Interval**: Modify the interval (default: 5 seconds) in the progress tracking section for more/less frequent updates.
 - **Upload Limit**: Uncomment `uploadLimit: UPLOAD_LIMIT` in `clientOpts` to set upload speed (helps with peer reciprocity).
 - **Trackers**: The `PUBLIC_TRACKERS` array is pre-filled with reliable ones (updated October 2025). Add/remove as needed.
 - **Suppress Warnings**: Uncomment the `torrent.on('warning', ...)` block to hide logs like piece failures or timeouts.
@@ -109,7 +131,8 @@ This is a Node.js script for downloading torrents from magnet links. It supports
 3. **File Selection**: Parses user input (numbers, ranges, "all") and calculates exact piece ranges to download only selected files.
 4. **Folder Creation**: Sanitizes torrent name and creates a subfolder.
 5. **Downloading**: Re-adds torrent with path, selects pieces, and monitors progress via interval.
-6. **Completion**: Custom check sums downloaded bytes for selected files; exits on finish or error.
+6. **Progress Visualization**: Renders animated progress bar and calculates ETA based on rolling average of download speeds.
+7. **Completion**: Custom check sums downloaded bytes for selected files; exits on finish or error.
 
 The script is robust: It deselects all pieces first, then precisely selects needed ones to avoid extras. Retries failed pieces automatically (BitTorrent standard).
 
@@ -117,10 +140,12 @@ The script is robust: It deselects all pieces first, then precisely selects need
 - **Slow Speeds**: Ensure torrent has many seeders. Use VPN. Update trackers if timeouts occur.
 - **Piece Verification Failures**: Normal for bad peers—script retries. If persistent, try different torrent.
 - **No Peers**: Add more trackers or check internet/firewall.
+- **Progress Bar Display Issues**: Ensure your terminal supports Unicode characters. Most modern terminals do.
 - **Errors**:
   - "Invalid magnet": Ensure link starts with `magnet:`.
   - Module errors: Run `npm install` again; check Node version.
 - **Progress >100% or Stalled**: Due to retries; wait or restart with better network.
+- **ETA Jumps Around**: Normal during the first few seconds as the algorithm calibrates. It stabilizes after a few progress updates.
 
 For advanced tweaks: Integrate with Express for a web UI, or add bandwidth throttling.
 
@@ -237,12 +262,13 @@ aria2c --conf-path="C:\Program Files\aria2\aria2.conf" "magnet:?xt=urn:btih:..."
 |---------|------------------|-------|
 | Setup | npm install | Binary download |
 | Speed | Moderate | Faster |
-| UI | Custom progress | Command-line |
+| UI | Animated progress bar | Command-line |
+| ETA | Smart prediction | Basic display |
 | File selection | Interactive | CLI flags |
 | Maturity | Good | Excellent |
 | Use case | Node.js projects | Standalone use |
 
-**Choose WebTorrent** if you want easy integration with Node.js projects or prefer interactive file selection.
+**Choose WebTorrent** if you want easy integration with Node.js projects, prefer interactive file selection, or enjoy the animated progress bar with intelligent ETA predictions.
 
 **Choose aria2** if you need maximum speed, stability, or already use command-line tools.
 

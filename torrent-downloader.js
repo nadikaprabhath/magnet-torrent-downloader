@@ -36,6 +36,15 @@ const PUBLIC_TRACKERS = [
   'udp://open.demonii.si:1337/announce'
 ];
 
+// Display details in 
+console.log ('');
+console.log ('========================================');
+console.log('Copyright (c) 2025 Nadika Prabhath');
+console.log('GitHub: https://github.com/nadikaprabhath');
+console.log('All rights reserved.');
+console.log ('========================================');
+console.log ('');
+
 // Ensure base download path exists
 const ensureBasePath = async () => {
   try {
@@ -170,26 +179,62 @@ async function downloadTorrent(originalMagnetURI) {
     const selectedLength = selectedIndices.reduce((acc, index) => acc + torrent.files[index].length, 0);
     console.log(`Selected total size: ${(selectedLength / 1024 / 1024).toFixed(2)} MB`);
 
-    // Progress interval with accurate selected downloaded calculation
+    // Variables for animated progress and improved ETA
+    let prevDownloaded = 0;
+    let speedHistory = []; // For averaging speeds over last 10 intervals
+    const HISTORY_SIZE = 10;
+    const BAR_LENGTH = 50; // Length of the progress bar
+    const UPDATE_INTERVAL = 1000; // Update every 1 second for smoother animation
+
+    // Progress interval with animated bar and improved ETA
     const progressInterval = setInterval(() => {
       const selectedDownloaded = selectedIndices.reduce((acc, index) => acc + torrent.files[index].downloaded, 0);
       const progress = Math.min((selectedDownloaded / selectedLength) * 100, 100);
       const downloaded = (selectedDownloaded / 1024 / 1024).toFixed(2);
-      const speed = (torrent.downloadSpeed / 1024 / 1024).toFixed(2);
+
+      // Calculate current speed (delta over interval)
+      const delta = selectedDownloaded - prevDownloaded;
+      const currentSpeed = delta / (UPDATE_INTERVAL / 1000); // Bytes per second
+      prevDownloaded = selectedDownloaded;
+
+      // Maintain speed history for averaging
+      speedHistory.push(currentSpeed);
+      if (speedHistory.length > HISTORY_SIZE) speedHistory.shift();
+
+      // Use average speed for ETA prediction
+      const avgSpeed = speedHistory.reduce((a, b) => a + b, 0) / speedHistory.length;
       const remainingBytes = selectedLength - selectedDownloaded;
-      const timeLeft = remainingBytes > 0 && torrent.downloadSpeed > 0 ? (remainingBytes / torrent.downloadSpeed / 60).toFixed(2) : 'Unknown';
+      let timeLeft = 'Unknown';
+      if (remainingBytes > 0 && avgSpeed > 0) {
+        const etaSeconds = remainingBytes / avgSpeed;
+        const minutes = Math.floor(etaSeconds / 60);
+        const seconds = Math.floor(etaSeconds % 60);
+        timeLeft = `${minutes}m ${seconds}s`;
+      }
+
+      const speed = (torrent.downloadSpeed / 1024 / 1024).toFixed(2);
       const peers = torrent.numPeers;
 
-      console.log(`Progress: ${progress.toFixed(2)}% | Downloaded: ${downloaded} MB | Speed: ${speed} MB/s | Time left: ${timeLeft} min | Peers: ${peers}`);
+      // Build colorful animated progress bar
+      const filled = Math.round(progress / 100 * BAR_LENGTH);
+      const filledBar = '\x1b[42m' + ' '.repeat(filled) + '\x1b[0m'; // Green background for filled
+      const emptyBar = '\x1b[100m' + ' '.repeat(BAR_LENGTH - filled) + '\x1b[0m'; // Gray background for empty
+      const bar = filledBar + emptyBar;
+
+      // Clear the current line and rewrite (for animation effect)
+      process.stdout.clearLine(0);
+      process.stdout.cursorTo(0);
+      process.stdout.write(`\x1b[90m[\x1b[0m${bar}\x1b[90m]\x1b[0m \x1b[36m${progress.toFixed(2)}%\x1b[0m | \x1b[33mDownloaded: ${downloaded} MB\x1b[0m | \x1b[32mSpeed: ${speed} MB/s\x1b[0m | \x1b[35mETA: ${timeLeft}\x1b[0m | \x1b[34mPeers: ${peers}\x1b[0m`);
 
       // Custom completion check
       if (selectedDownloaded >= selectedLength) {
         clearInterval(progressInterval);
+        process.stdout.write('\n'); // New line after completion
         console.log(`\nDownload complete! Files saved to: ${downloadPath}`);
         client.destroy();
         process.exit(0);
       }
-    }, 5000);
+    }, UPDATE_INTERVAL);
 
     // Error handling
     torrent.on('error', (err) => {
