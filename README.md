@@ -1,3 +1,24 @@
+<p align="center">
+  <a href="https://github.com/Tw93" target="_blank">
+    <img src="https://img.shields.io/badge/Follow-Tw5-000000?style=for-the-badge&logo=github&logoColor=white" height="30">
+  </a>
+  <a href="https://t.me/your_telegram_link" target="_blank">
+    <img src="https://img.shields.io/badge/Chat-Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" height="30">
+  </a>
+   <a href="https://www.linkedin.com/in/nadikaprabhath" target="_blank">
+    <img src="https://img.shields.io/badge/Chat-linkendin-26A5E4?style=for-the-badge&logo=linkendin&logoColor=white" height="30">
+  </a>
+  <a href="#" target="_blank">
+    <img src="https://img.shields.io/badge/Downloads-2-00C853?style=for-the-badge&logo=icloud&logoColor=white" height="30">
+  </a>
+  <a href="#" target="_blank">
+    <img src="https://img.shields.io/badge/Commit_Activity-2/month-2962FF?style=for-the-badge&logo=git&logoColor=white" height="30">
+  </a>
+  <a href="#" target="_blank">
+    <img src="https://img.shields.io/badge/Issues-1_closed-FFD54F?style=for-the-badge&logo=github&logoColor=black" height="30">
+  </a>
+</p>
+
 # Torrent Downloader Script
 
 This is a Node.js script for downloading torrents from magnet links. It supports selective file downloading, creates dedicated folders for each torrent, adds public trackers for better speed, and provides real-time progress updates with an animated progress bar. Built with WebTorrent, it's lightweight and runs in the console.
