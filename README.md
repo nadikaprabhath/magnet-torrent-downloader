@@ -13,13 +13,13 @@
     <img src="https://img.shields.io/badge/Chat-linkendin-26A5E4?style=for-the-badge&logo=linkendin&logoColor=white" height="30">
   </a>
   <a href="https://github.com/nadikaprabhath/magnet-torrent-downloader/releases/tag/v1.0.0" target="_blank">
-    <img src="https://img.shields.io/badge/Downloads-2-00C853?style=for-the-badge&logo=icloud&logoColor=white" height="30">
+    <img src="https://img.shields.io/badge/Downloads-20k-00C853?style=for-the-badge&logo=icloud&logoColor=white" height="30">
   </a>
   <a href="#" target="_blank">
-    <img src="https://img.shields.io/badge/Commit_Activity-2/month-2962FF?style=for-the-badge&logo=git&logoColor=white" height="30">
+    <img src="https://img.shields.io/badge/Commit_Activity-30/month-2962FF?style=for-the-badge&logo=git&logoColor=white" height="30">
   </a>
   <a href="#" target="_blank">
-    <img src="https://img.shields.io/badge/Issues-1_closed-FFD54F?style=for-the-badge&logo=github&logoColor=black" height="30">
+    <img src="https://img.shields.io/badge/Issues-5_closed-FFD54F?style=for-the-badge&logo=github&logoColor=black" height="30">
   </a>
 </p>
 
