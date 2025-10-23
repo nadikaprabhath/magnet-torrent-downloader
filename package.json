@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "nadika prabhath",
   "license": "ISC",
   "dependencies": {
     "webtorrent": "^2.8.4"
