@@ -23,8 +23,6 @@
 
 This is a Node.js script for downloading torrents from magnet links. It supports selective file downloading, creates dedicated folders for each torrent, adds public trackers for better speed, and provides real-time progress updates with an animated progress bar. Built with WebTorrent, it's lightweight and runs in the console.
 
-**Alternative**: For a more mature solution with higher speeds, see the [aria2 Setup Guide](#alternative-using-aria2) below.
-
 ## Features
 - Paste a magnet link to start downloading.
 - Fetches torrent metadata and lists files for selective download (e.g., choose specific files or "all").
