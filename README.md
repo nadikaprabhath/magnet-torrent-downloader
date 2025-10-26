@@ -178,4 +178,4 @@ For advanced tweaks: Integrate with Express for a web UI, or add bandwidth throt
 Fork the repo, make changes, and submit a pull request. Issues welcome at [github.com/nadikaprabhath/magnet-torrent-downloader](https://github.com/nadikaprabhath/magnet-torrent-downloader).
 
 ## License
-MIT License. Copyright (c) 2025 Nadika Prabhath. See script header for details.
+MIT License. Copyright (c) 2025 Nadika Prabhath. See script header for details. 
