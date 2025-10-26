@@ -64,7 +64,7 @@ This is a Node.js script for downloading torrents from magnet links. It supports
 ```json
    {
      "type": "module",
-     // ... other fields
+     //... other fields
    }
 ```
    Install the main library:
