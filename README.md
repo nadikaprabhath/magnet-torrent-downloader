@@ -1,6 +1,4 @@
-<p align="center">
-  <b>Magnet Torrent Downloader</b>
-</p>
+# Zippy
 
 <p align="center">
   <a href="https://github.com/nadikaprabhath" target="_blank">
